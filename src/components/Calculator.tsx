@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { operations } from "../utils/operations";
 import { NumberButton } from "./common/NumberButton";
 import { OperatorButton } from "./common/OperatorButton";
@@ -6,7 +6,6 @@ import { OperatorButton } from "./common/OperatorButton";
 export const Calculator = () => {
   const [input, setInput] = useState<string>(""); // 사용자 입력
   const [userInput, setUserInput] = useState<string>("");
-  const [result, setResult] = useState<string>("0"); // 계산 결과
   const [previousValue, setPreviousValue] = useState<number | null>(null); // 이전 계산값
   const [operator, setOperator] = useState<string | null>(null); // 현재 연산자
 
@@ -20,7 +19,7 @@ export const Calculator = () => {
     setOperator(symbol);
     if (previousValue && operator && input) {
       handleCalculationResult(symbol);
-    } else if (["+", "−", "×", "÷", "%", "^"].includes(symbol)) {
+    } else if (["+", "-", "×", "÷", "%", "^"].includes(symbol)) {
       if (input) {
         setPreviousValue(parseFloat(input));
         setInput("");
@@ -31,7 +30,7 @@ export const Calculator = () => {
 
   /**계산 결과 함수 */
   const handleCalculationResult = (symbol: string) => {
-    if (["+", "−", "×", "÷", "%", "^", "="].includes(symbol)) {
+    if (["+", "-", "×", "÷", "%", "^", "="].includes(symbol)) {
       if (previousValue && operator && input) {
         const result = operations[operator](previousValue, parseFloat(input));
         setInput("");
@@ -40,6 +39,40 @@ export const Calculator = () => {
       }
     }
   };
+
+  /**키보드 입력 처리 함수 */
+  const handleKeyPress = (e: KeyboardEvent) => {
+    const { key } = e;
+
+    if (!isNaN(parseFloat(key)) || key === ".") {
+      handleClickNumber(key);
+    } else if (
+      key === "+" ||
+      key === "-" ||
+      key === "*" ||
+      key === "/" ||
+      key === "%" ||
+      key === "^"
+    ) {
+      handleClickOperator(key === "*" ? "×" : key === "/" ? "÷" : key);
+    } else if (key === "Enter") {
+      handleCalculationResult("=");
+    } else if (key === "Backspace") {
+      setInput((prev) => prev.slice(0, -1));
+    } else if (key === "Escape") {
+      setInput("");
+      setPreviousValue(null);
+      setOperator(null);
+      setUserInput("");
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyPress);
+    return () => {
+      window.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [input, previousValue, operator]);
 
   return (
     <div className="w-[400px] h-[367px] bg-midnight p-25px">
