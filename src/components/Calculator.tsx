@@ -31,11 +31,39 @@ export const Calculator = () => {
   /**계산 결과 함수 */
   const handleCalculationResult = (symbol: string) => {
     if (["+", "-", "×", "÷", "%", "^", "="].includes(symbol)) {
-      if (previousValue && operator && input) {
-        const result = operations[operator](previousValue, parseFloat(input));
+      try {
+        //1. 0으로 나누는 경우 에러 처리
+        if (operator === "÷" && parseFloat(input) === 0) {
+          window.alert("Error: Cannot divide by zero");
+          return;
+        }
+
+        if (previousValue && operator && input) {
+          const operation = operations[operator];
+
+          //2. 정의되지 않은 연산자 에러 처리
+          if (typeof operation !== "function") {
+            window.alert(`Operation for "${operator}" is not defined`);
+          }
+          const result = operations[operator](previousValue, parseFloat(input));
+          //3. 무한대나 NaN 에러 처리
+          if (!isFinite(result)) {
+            window.alert("Result is not finite");
+          } else if (isNaN(result)) {
+            window.alert("Result is not a number");
+          }
+
+          setInput("");
+          setUserInput(result.toString());
+          setPreviousValue(result);
+        }
+      } catch (error) {
+        window.alert(`Error: ${error}`);
+
         setInput("");
-        setUserInput(result.toString());
-        setPreviousValue(result);
+        setPreviousValue(null);
+        setOperator(null);
+        setUserInput("");
       }
     }
   };
