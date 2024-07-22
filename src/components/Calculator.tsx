@@ -17,10 +17,12 @@ export const Calculator = () => {
 
   /**연산 버튼 클릭 함수 */
   const handleClickOperator = (symbol: string) => {
-    if (["+", "−", "×", "÷", "%", "^"].includes(symbol)) {
+    setOperator(symbol);
+    if (previousValue && operator && input) {
+      handleCalculationResult(symbol);
+    } else if (["+", "−", "×", "÷", "%", "^"].includes(symbol)) {
       if (input) {
         setPreviousValue(parseFloat(input));
-        setOperator(symbol);
         setInput("");
         setUserInput(input);
       }
@@ -29,12 +31,13 @@ export const Calculator = () => {
 
   /**계산 결과 함수 */
   const handleCalculationResult = (symbol: string) => {
-    if (previousValue && operator && input) {
-      const result = operations[operator](previousValue, parseFloat(input));
-      setInput(result.toString());
-      setPreviousValue(result);
-
-      // console.log("prev", previousValue, "input", input, "result", result);
+    if (["+", "−", "×", "÷", "%", "^", "="].includes(symbol)) {
+      if (previousValue && operator && input) {
+        const result = operations[operator](previousValue, parseFloat(input));
+        setInput("");
+        setUserInput(result.toString());
+        setPreviousValue(result);
+      }
     }
   };
 
