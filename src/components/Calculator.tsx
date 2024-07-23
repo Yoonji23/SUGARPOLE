@@ -28,7 +28,12 @@ export const Calculator = () => {
 
   /**숫자 또는 점 클릭 함수 */
   const handleClickNumber = (num: string) => {
-    setInput((prev) => prev + num);
+    if (input === "0" && num !== ".") {
+      // 012 같은 에러 상황 처리 ex) 012 -> 12로 대체
+      setInput(num);
+    } else {
+      setInput((prev) => prev + num);
+    }
   };
 
   /**연산 버튼 클릭 함수 */
