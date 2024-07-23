@@ -22,7 +22,7 @@ const operatorButtons = ["×", "÷", "+", "-", "%", "^", "="];
 
 export const Calculator = () => {
   const [input, setInput] = useState<string>(""); // 사용자 입력
-  const [userInput, setUserInput] = useState<string>("");
+  const [userInput, setUserInput] = useState<string>("0");
   const [previousValue, setPreviousValue] = useState<number | null>(null); // 이전 계산값
   const [operator, setOperator] = useState<string | null>(null); // 현재 연산자
 
@@ -135,7 +135,7 @@ export const Calculator = () => {
          bg-[#3A3F77] pt-[18px] pb-[13px] "
       >
         <input
-          className="flex w-[303px] text-white font-inter text-[32px] text-right mr-[16px] ml-[31px] pr-[10px] bg-[#3A3F77] "
+          className="flex w-[303px] text-white font-inter text-[32px] text-right mr-[16px] ml-[31px] pr-[10px] bg-[#3A3F77]"
           readOnly
           value={input || userInput}
         ></input>
