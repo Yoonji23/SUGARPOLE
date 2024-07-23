@@ -3,6 +3,23 @@ import { operations } from "../utils/operations";
 import { NumberButton } from "./common/NumberButton";
 import { OperatorButton } from "./common/OperatorButton";
 
+const numberButtons = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  ".",
+  "0",
+  "x",
+];
+
+const operatorButtons = ["×", "÷", "+", "-", "%", "^", "="];
+
 export const Calculator = () => {
   const [input, setInput] = useState<string>(""); // 사용자 입력
   const [userInput, setUserInput] = useState<string>("");
@@ -27,7 +44,10 @@ export const Calculator = () => {
       }
     }
   };
-
+  /** 삭제 입력 함수 */
+  const handleClickDelete = () => {
+    setInput((prev) => prev.slice(0, -1));
+  };
   /**계산 결과 함수 */
   const handleCalculationResult = (symbol: string) => {
     if (["+", "-", "×", "÷", "%", "^", "="].includes(symbol)) {
@@ -103,67 +123,43 @@ export const Calculator = () => {
   }, [input, previousValue, operator]);
 
   return (
-    <div className="w-[400px] h-[367px] bg-midnight p-25px">
+    <div className="flex flex-col w-[400px] h-[367px] bg-[#242530] p-[25px]">
       <div
-        className="w-[350px] h-[70px]  rounded-[20px]  bg-dark-blue flex items-center
-        pr-3 font-inter text-[32px]"
+        className="w-[350px] h-[70px]  rounded-[20px] flex items-center
+        justify-center
+         bg-[#3A3F77] pt-[18px] pb-[13px] "
       >
         <input
-          className="text-white  ml-auto  bg-dark-blue"
+          className="flex w-[303px] text-white font-inter text-[32px] text-right mr-[16px] ml-[31px] pr-[10px] bg-[#3A3F77] "
           readOnly
           value={input || userInput}
         ></input>
       </div>
-      <div className="mt-22px">
-        <div className="flex">
-          <NumberButton value={"1"} onClick={handleClickNumber} />
-          <NumberButton value={"2"} onClick={handleClickNumber} />
-          <NumberButton value={"3"} onClick={handleClickNumber} />
+
+      <div className="flex flex-grow mt-[22px] gap-[23px] ">
+        <div className="grid grid-cols-3 gap-[15px] flex-grow">
+          {numberButtons.map((num: string) => {
+            return (
+              <div key={num}>
+                <NumberButton
+                  value={num}
+                  onClick={num === "x" ? handleClickDelete : handleClickNumber}
+                ></NumberButton>
+              </div>
+            );
+          })}
         </div>
-        <div className="flex">
-          <NumberButton value={"4"} onClick={handleClickNumber} />
-          <NumberButton value={"5"} onClick={handleClickNumber} />
-          <NumberButton value={"6"} onClick={handleClickNumber} />
-        </div>
-        <div className="flex">
-          <NumberButton value={"7"} onClick={handleClickNumber} />
-          <NumberButton value={"8"} onClick={handleClickNumber} />
-          <NumberButton value={"9"} onClick={handleClickNumber} />
-        </div>
-        <div className="flex">
-          <NumberButton value={"."} onClick={handleClickNumber} />
-          <NumberButton value={"0"} onClick={handleClickNumber} />
-          <NumberButton value={"x"} onClick={() => {}} />
-        </div>
-        <div className="flex">
-          <OperatorButton
-            symbol={"×"}
-            onClick={handleClickOperator}
-          ></OperatorButton>
-          <OperatorButton
-            symbol={"÷"}
-            onClick={handleClickOperator}
-          ></OperatorButton>
-          <OperatorButton
-            symbol={"+"}
-            onClick={handleClickOperator}
-          ></OperatorButton>
-          <OperatorButton
-            symbol={"−"}
-            onClick={handleClickOperator}
-          ></OperatorButton>
-          <OperatorButton
-            symbol={"%"}
-            onClick={handleClickOperator}
-          ></OperatorButton>
-          <OperatorButton
-            symbol={"^"}
-            onClick={handleClickOperator}
-          ></OperatorButton>
-          <OperatorButton
-            symbol={"="}
-            onClick={handleCalculationResult}
-          ></OperatorButton>
+
+        <div className="grid grid-cols-2 gap-[15px] flex-shrink-0">
+          {operatorButtons.map((symbol) => (
+            <OperatorButton
+              key={symbol}
+              symbol={symbol}
+              onClick={
+                symbol === "=" ? handleCalculationResult : handleClickOperator
+              }
+            />
+          ))}
         </div>
       </div>
     </div>
