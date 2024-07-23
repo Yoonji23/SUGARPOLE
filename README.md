@@ -26,4 +26,4 @@
 ## 👀 데모영상
 
 1. 기본 사칙연산
-   <img width="80%" src="https://github.com/user-attachments/assets/036cb931-18ec-40e4-a41e-b2c7d94d1601">
+   <img width="80%" src="https://github.com/user-attachments/assets/47e7e91d-fca2-44ac-88a2-a477652968c7">
